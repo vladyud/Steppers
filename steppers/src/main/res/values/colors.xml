@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="transparent">#00ffffff</color>
-    <color name="circle_color_default_blue">#4184F3</color>
-    <color name="circle_color_default_gray">#BDBDBD</color>
+    <color name="circle_color_light_blue">#00ACCF</color>
+    <color name="circle_color_dark_blue">#0D5969</color>
+    <color name="line_color">#E1E1E1</color>
 </resources>

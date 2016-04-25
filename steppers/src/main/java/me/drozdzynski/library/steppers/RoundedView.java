@@ -36,6 +36,12 @@ import java.lang.reflect.Field;
 
 public class RoundedView extends View {
 
+    private Paint paint = new Paint(Paint.DITHER_FLAG);
+    private String text = null;
+    private boolean checked = false;
+    private int color = ContextCompat.getColor(getContext(), R.color.circle_color_dark_blue);
+
+
     public RoundedView(Context context) {
         super(context);
     }
@@ -55,15 +61,11 @@ public class RoundedView extends View {
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
-
+        super.onLayout(changed, l, t, r, b);
     }
-
-    Paint paint = new Paint(Paint.DITHER_FLAG);
 
     @Override
     protected void onDraw(Canvas canvas) {
-        //if (getBackgroundColor(this) != 0) color = getBackgroundColor(this);
-
         paint.setAntiAlias(true);
         paint.setFilterBitmap(true);
         paint.setDither(true);
@@ -73,33 +75,22 @@ public class RoundedView extends View {
         canvas.drawCircle(getWidth() / 2, getHeight() / 2,
                 getWidth() / 2, paint);
 
-        if(text != null && !checked) drawText(canvas);
-        if(checked && text == null) drawChecked(canvas);
-    }
+        if(text != null && !checked) {
+            drawText(canvas);
+        }
 
-    private int color = ContextCompat.getColor(getContext(), R.color.circle_color_default_gray);
-    private String text = null;
-    private boolean checked = false;
+        if(checked && text == null) {
+            drawChecked(canvas);
+        }
+    }
 
     public void setCircleColor(int color) {
-        this.color = color;
-        invalidate();
-    }
-
-    public void setCircleAccentColor(){
-        final TypedValue value = new TypedValue();
-        getContext().getTheme().resolveAttribute(R.attr.colorAccent, value, true);
-        if(value != null) color = value.data;
-        else ContextCompat.getColor(getContext(), R.color.circle_color_default_blue);
-        invalidate();
-    }
-
-    public void setCircleGrayColor(){
-        color = ContextCompat.getColor(getContext(), R.color.circle_color_default_gray);
+        this.color = ContextCompat.getColor(getContext(), color);
         invalidate();
     }
 
     public void setText(String text) {
+        color = ContextCompat.getColor(getContext(), R.color.circle_color_dark_blue);
         this.text = text;
         this.checked = false;
         invalidate();
@@ -111,42 +102,20 @@ public class RoundedView extends View {
         invalidate();
     }
 
-    private int getBackgroundColor(View view) {
-        ColorDrawable drawable = (ColorDrawable) view.getBackground();
-        if(drawable != null) {
-            if (Build.VERSION.SDK_INT >= 11) {
-                return drawable.getColor();
-            }
-            try {
-                Field field = drawable.getClass().getDeclaredField("mState");
-                field.setAccessible(true);
-                Object object = field.get(drawable);
-                field = object.getClass().getDeclaredField("mUseColor");
-                field.setAccessible(true);
-                return field.getInt(object);
-            } catch (Exception e) {
-                // TODO: handle exception
-            }
-        }
-        return 0;
-    }
-
     private void drawText(Canvas canvas) {
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         paint.setTextSize(getResources().getDimension(R.dimen.item_circle_text_size));
 
         Rect areaRect = new Rect(0, 0, canvas.getWidth(), canvas.getHeight());
-
         RectF bounds = new RectF(areaRect);
 
         bounds.right = paint.measureText(text, 0, text.length());
-
         bounds.bottom = paint.descent() - paint.ascent();
-
         bounds.left += (areaRect.width() - bounds.right) / 2.0f;
         bounds.top += (areaRect.height() - bounds.bottom) / 2.0f;
 
         paint.setColor(Color.WHITE);
+
         canvas.drawText(text, bounds.left, bounds.top - paint.ascent(), paint);
     }
 
@@ -155,10 +124,8 @@ public class RoundedView extends View {
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_check);
 
         float posX = (canvas.getWidth()  - bitmap.getWidth()) / 2;
-
         float posY = (canvas.getHeight() - bitmap.getHeight()) / 2;
 
         canvas.drawBitmap(bitmap, posX, posY, paint);
     }
-
 }

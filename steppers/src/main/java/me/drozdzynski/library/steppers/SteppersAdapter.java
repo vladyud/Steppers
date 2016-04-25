@@ -92,8 +92,12 @@ public class SteppersAdapter extends RecyclerView.Adapter<SteppersViewHolder> {
             holder.roundedView.setText(position + 1 + "");
         }
 
-        if(position == currentStep || holder.isChecked()) holder.roundedView.setCircleAccentColor();
-        else holder.roundedView.setCircleGrayColor();
+        if(position == currentStep || holder.isChecked()) {
+            holder.roundedView.setCircleColor(R.color.circle_color_light_blue);
+        }
+        else {
+            holder.roundedView.setCircleColor(R.color.circle_color_dark_blue);
+        }
 
         holder.textViewLabel.setText(steppersItem.getLabel());
         holder.textViewSubLabel.setText(steppersItem.getSubLabel());
@@ -111,14 +115,22 @@ public class SteppersAdapter extends RecyclerView.Adapter<SteppersViewHolder> {
             }
         });
 
-        if (position == getItemCount() - 1) holder.buttonContinue.setText(context.getResources().getString(R.string.step_finish));
-        else holder.buttonContinue.setText(context.getResources().getString(R.string.step_continue));
+        if (position == getItemCount() - 1) {
+            holder.buttonContinue.setText(context.getResources().getString(R.string.step_finish));
+        }
+        else {
+            holder.buttonContinue.setText(context.getResources().getString(R.string.step_continue));
+        }
 
         holder.buttonContinue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(position == getItemCount() - 1) config.getOnFinishAction().onFinish();
-                else nextStep();
+                if(position == getItemCount() - 1) {
+                    config.getOnFinishAction().onFinish();
+                }
+                else {
+                    nextStep();
+                }
             }
         });
 
@@ -130,13 +142,7 @@ public class SteppersAdapter extends RecyclerView.Adapter<SteppersViewHolder> {
                 }
             });
 
-
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        //FrameLayout frameLayout = (FrameLayout) inflater.inflate(R.layout.frame_layout, holder.frameLayout, true);
-
         if(frameLayoutIds.get(position) == null) frameLayoutIds.put(position, findUnusedId(holder.itemView));
-
-        //frameLayout.setId(frameLayoutIds.get(position));
 
         if(config.getFragmentManager() != null && steppersItem.getFragment() != null) {
             holder.frameLayout.setBackgroundColor(ContextCompat.getColor(context, R.color.transparent));
