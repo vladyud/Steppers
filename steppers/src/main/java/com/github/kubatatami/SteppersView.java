@@ -73,6 +73,10 @@ public class SteppersView extends LinearLayout {
         return steppersAdapter.getStepFragment(step);
     }
 
+    public Fragment getCurrentStepFragment() {
+        return getStepFragment(getCurrentStep());
+    }
+
     public int getCurrentStep() {
         return steppersAdapter.getCurrentStep();
     }
@@ -87,6 +91,10 @@ public class SteppersView extends LinearLayout {
 
     public void prevStep() {
         steppersAdapter.prevStep();
+    }
+
+    public int getStepCount() {
+        return steppersAdapter.getItemCount();
     }
 
     @Override
