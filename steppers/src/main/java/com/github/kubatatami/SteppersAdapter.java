@@ -181,6 +181,10 @@ public class SteppersAdapter extends RecyclerView.Adapter<SteppersViewHolder> {
         notifyDataSetChanged();
     }
 
+    public SteppersItem getItem(int step) {
+        return items.get(step);
+    }
+
     @Override
     public int getItemCount() {
         return items.size();
@@ -197,4 +201,5 @@ public class SteppersAdapter extends RecyclerView.Adapter<SteppersViewHolder> {
     private static String makeFragmentName(int viewId, long id) {
         return "android:steppers:" + viewId + ":" + id;
     }
+
 }

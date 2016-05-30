@@ -101,6 +101,10 @@ public class SteppersView extends LinearLayout {
         steppersAdapter.switchStep(step, item);
     }
 
+    public SteppersItem getItem(int step){
+        return steppersAdapter.getItem(step);
+    }
+
     @Override
     protected Parcelable onSaveInstanceState() {
         Parcelable superState = super.onSaveInstanceState();
