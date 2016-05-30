@@ -133,6 +133,11 @@ public class SteppersAdapter extends RecyclerView.Adapter<SteppersViewHolder> {
         }
     }
 
+    public void switchStep(int step, SteppersItem item) {
+        items.set(step, item);
+        notifyItemChanged(step);
+    }
+
     @Override
     public long getItemId(int position) {
         return position;
