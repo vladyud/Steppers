@@ -3,6 +3,7 @@ package com.github.kubatatami.steppers.sample;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.widget.Toast;
 
 import com.github.kubatatami.SteppersItem;
 import com.github.kubatatami.SteppersView;
@@ -34,6 +35,12 @@ public class MainActivity extends AppCompatActivity {
         }
         steppersView.setFragmentManager(getSupportFragmentManager());
         steppersView.setItems(steps);
+        steppersView.addOnStepChangedListener(new SteppersView.OnStepChangedListener() {
+            @Override
+            public void onStepChanged(int step) {
+                Toast.makeText(MainActivity.this, "Step changed", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     public void nextStep() {

@@ -29,6 +29,7 @@ import android.util.AttributeSet;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SteppersView extends LinearLayout {
@@ -36,6 +37,8 @@ public class SteppersView extends LinearLayout {
     private SteppersAdapter steppersAdapter;
 
     private FragmentManager fragmentManager;
+
+    private List<OnStepChangedListener> onStepChangedListeners = new ArrayList<>();
 
     public SteppersView(Context context) {
         super(context);
@@ -67,6 +70,14 @@ public class SteppersView extends LinearLayout {
         if (steppersAdapter == null) {
             build();
         }
+    }
+
+    public void addOnStepChangedListener(OnStepChangedListener onStepChangedListener) {
+        onStepChangedListeners.add(onStepChangedListener);
+    }
+
+    public void removeOnStepChangedListener(OnStepChangedListener onStepChangedListener) {
+        onStepChangedListeners.remove(onStepChangedListener);
     }
 
     public Fragment getStepFragment(int step) {
@@ -101,7 +112,7 @@ public class SteppersView extends LinearLayout {
         steppersAdapter.switchStep(step, item);
     }
 
-    public SteppersItem getItem(int step){
+    public SteppersItem getItem(int step) {
         return steppersAdapter.getItem(step);
     }
 
@@ -115,24 +126,31 @@ public class SteppersView extends LinearLayout {
     protected void onRestoreInstanceState(Parcelable state) {
         SavedState savedState = (SavedState) state;
         super.onRestoreInstanceState(savedState.getSuperState());
-        setStep(savedState.currentStep);
+        setStep(savedState.getCurrentStep());
     }
 
     private void build() {
         setOrientation(LinearLayout.HORIZONTAL);
-
         RecyclerView recyclerView = new RecyclerView(getContext());
         RecyclerView.LayoutParams layoutParams = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         recyclerView.setLayoutParams(layoutParams);
-
         addView(recyclerView);
-
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
         steppersAdapter = new SteppersAdapter(this, fragmentManager);
-
         recyclerView.setAdapter(steppersAdapter);
+        steppersAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onItemRangeChanged(int positionStart, int itemCount) {
+                invokeStepChangedListeners(getCurrentStep());
+            }
+        });
+    }
+
+    private void invokeStepChangedListeners(int step) {
+        for(OnStepChangedListener onStepChangedListener : onStepChangedListeners) {
+            onStepChangedListener.onStepChanged(step);
+        }
     }
 
     protected static class SavedState extends BaseSavedState {
@@ -168,6 +186,11 @@ public class SteppersView extends LinearLayout {
                 return new SavedState[size];
             }
         };
+    }
+
+    public interface OnStepChangedListener {
+
+        void onStepChanged(int step);
     }
 
 }
