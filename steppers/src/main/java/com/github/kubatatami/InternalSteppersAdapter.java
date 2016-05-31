@@ -83,11 +83,11 @@ public class InternalSteppersAdapter extends RecyclerView.Adapter<SteppersViewHo
 
         holder.frameLayout.setVisibility(position == currentStep ? View.VISIBLE : View.GONE);
 
-        initFragment(holder, position, adapter.getFragment(position));
+        initFragment(holder, position);
     }
 
-    private void initFragment(SteppersViewHolder holder, int position, Fragment stepFragment) {
-        if (fragmentManager != null && stepFragment != null) {
+    private void initFragment(SteppersViewHolder holder, int position) {
+        if (fragmentManager != null ) {
             holder.frameLayout.setTag(frameLayoutName());
 
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -103,7 +103,7 @@ public class InternalSteppersAdapter extends RecyclerView.Adapter<SteppersViewHo
                 if (fragment != null) {
                     fragmentTransaction.attach(fragment);
                 } else {
-                    fragment = stepFragment;
+                    fragment = adapter.getFragment(position);
                     fragmentTransaction.add(steppersView.getId(), fragment,
                             name);
                 }
