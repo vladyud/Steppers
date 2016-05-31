@@ -26,7 +26,6 @@ public class SteppersItem extends Observable {
     private String subLabel;
     private Fragment fragment;
 
-
     public String getLabel() {
         return label;
     }

@@ -28,19 +28,16 @@ import android.view.ViewGroup;
 
 import com.github.kubatatami.steppers.R;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class SteppersAdapter extends RecyclerView.Adapter<SteppersViewHolder> {
+public class InternalSteppersAdapter extends RecyclerView.Adapter<SteppersViewHolder> {
 
     private SteppersView steppersView;
     private Context context;
-    private List<SteppersItem> items = new ArrayList<>();
     private FragmentManager fragmentManager;
 
     private int currentStep = 0;
+    private StepperAdapter adapter;
 
-    public SteppersAdapter(SteppersView steppersView, FragmentManager fragmentManager) {
+    public InternalSteppersAdapter(SteppersView steppersView, FragmentManager fragmentManager) {
         this.steppersView = steppersView;
         this.context = steppersView.getContext();
         this.fragmentManager = fragmentManager;
@@ -55,7 +52,6 @@ public class SteppersAdapter extends RecyclerView.Adapter<SteppersViewHolder> {
 
     @Override
     public void onBindViewHolder(final SteppersViewHolder holder, final int position) {
-        final SteppersItem steppersItem = items.get(position);
 
         holder.setChecked(position < currentStep);
         if (holder.isChecked()) {
@@ -82,16 +78,16 @@ public class SteppersAdapter extends RecyclerView.Adapter<SteppersViewHolder> {
         }
 
         holder.textViewLabel.setTextColor(ContextCompat.getColor(context, position == currentStep ? android.R.color.black : R.color.circle_color_dark_blue));
-        holder.textViewLabel.setText(steppersItem.getLabel());
-        holder.textViewSubLabel.setText(steppersItem.getSubLabel());
+        holder.textViewLabel.setText(adapter.getLabel(position));
+        holder.textViewSubLabel.setText(adapter.getSubLabel(position));
 
         holder.frameLayout.setVisibility(position == currentStep ? View.VISIBLE : View.GONE);
 
-        initFragment(holder, position, steppersItem);
+        initFragment(holder, position, adapter.getFragment(position));
     }
 
-    private void initFragment(SteppersViewHolder holder, int position, SteppersItem steppersItem) {
-        if (fragmentManager != null && steppersItem.getFragment() != null) {
+    private void initFragment(SteppersViewHolder holder, int position, Fragment stepFragment) {
+        if (fragmentManager != null && stepFragment != null) {
             holder.frameLayout.setTag(frameLayoutName());
 
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -107,7 +103,7 @@ public class SteppersAdapter extends RecyclerView.Adapter<SteppersViewHolder> {
                 if (fragment != null) {
                     fragmentTransaction.attach(fragment);
                 } else {
-                    fragment = steppersItem.getFragment();
+                    fragment = stepFragment;
                     fragmentTransaction.add(steppersView.getId(), fragment,
                             name);
                 }
@@ -131,11 +127,6 @@ public class SteppersAdapter extends RecyclerView.Adapter<SteppersViewHolder> {
                 }
             }
         }
-    }
-
-    public void switchStep(int step, SteppersItem item) {
-        items.set(step, item);
-        notifyItemChanged(step);
     }
 
     @Override
@@ -175,23 +166,13 @@ public class SteppersAdapter extends RecyclerView.Adapter<SteppersViewHolder> {
         }
     }
 
-    public void setItems(List<SteppersItem> items) {
-        this.items = items;
-        currentStep = 0;
-        notifyDataSetChanged();
-    }
-
-    public SteppersItem getItem(int step) {
-        return items.get(step);
-    }
-
     @Override
     public int getItemCount() {
-        return items.size();
+        return adapter.getStepCount();
     }
 
     private boolean isValidStep(int step) {
-        return step >= 0 && step < items.size();
+        return step >= 0 && step < adapter.getStepCount();
     }
 
     private static String frameLayoutName() {
@@ -202,4 +183,9 @@ public class SteppersAdapter extends RecyclerView.Adapter<SteppersViewHolder> {
         return "android:steppers:" + viewId + ":" + id;
     }
 
+    public void setAdapter(StepperAdapter adapter) {
+        this.adapter = adapter;
+        currentStep = 0;
+        notifyDataSetChanged();
+    }
 }
