@@ -34,7 +34,7 @@ import java.util.List;
 
 public class SteppersView extends LinearLayout {
 
-    private SteppersAdapter steppersAdapter;
+    private InternalSteppersAdapter internalSteppersAdapter;
 
     private FragmentManager fragmentManager;
 
@@ -58,16 +58,20 @@ public class SteppersView extends LinearLayout {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 
-    public void setItems(List<SteppersItem> items) {
-        if (fragmentManager != null && steppersAdapter == null) {
+    public void notifyDataSetChanged() {
+        internalSteppersAdapter.notifyDataSetChanged();
+    }
+
+    public void setAdapter(StepperAdapter adapter) {
+        if (fragmentManager != null && internalSteppersAdapter == null) {
             build();
         }
-        steppersAdapter.setItems(items);
+        internalSteppersAdapter.setAdapter(adapter);
     }
 
     public void setFragmentManager(FragmentManager fragmentManager) {
         this.fragmentManager = fragmentManager;
-        if (steppersAdapter == null) {
+        if (internalSteppersAdapter == null) {
             build();
         }
     }
@@ -81,7 +85,7 @@ public class SteppersView extends LinearLayout {
     }
 
     public Fragment getStepFragment(int step) {
-        return steppersAdapter.getStepFragment(step);
+        return internalSteppersAdapter.getStepFragment(step);
     }
 
     public Fragment getCurrentStepFragment() {
@@ -89,31 +93,23 @@ public class SteppersView extends LinearLayout {
     }
 
     public int getCurrentStep() {
-        return steppersAdapter.getCurrentStep();
+        return internalSteppersAdapter.getCurrentStep();
     }
 
     public void setStep(int step) {
-        steppersAdapter.setStep(step);
+        internalSteppersAdapter.setStep(step);
     }
 
     public void nextStep() {
-        steppersAdapter.nextStep();
+        internalSteppersAdapter.nextStep();
     }
 
     public void prevStep() {
-        steppersAdapter.prevStep();
+        internalSteppersAdapter.prevStep();
     }
 
     public int getStepCount() {
-        return steppersAdapter.getItemCount();
-    }
-
-    public void switchStep(int step, SteppersItem item) {
-        steppersAdapter.switchStep(step, item);
-    }
-
-    public SteppersItem getItem(int step) {
-        return steppersAdapter.getItem(step);
+        return internalSteppersAdapter.getItemCount();
     }
 
     @Override
@@ -137,9 +133,9 @@ public class SteppersView extends LinearLayout {
         addView(recyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        steppersAdapter = new SteppersAdapter(this, fragmentManager);
-        recyclerView.setAdapter(steppersAdapter);
-        steppersAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+        internalSteppersAdapter = new InternalSteppersAdapter(this, fragmentManager);
+        recyclerView.setAdapter(internalSteppersAdapter);
+        internalSteppersAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
             public void onItemRangeChanged(int positionStart, int itemCount) {
                 invokeStepChangedListeners(getCurrentStep());
