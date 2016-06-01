@@ -18,27 +18,42 @@ package com.github.kubatatami;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.ColorInt;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
+import android.widget.FrameLayout;
+
+import com.github.kubatatami.steppers.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SteppersView extends LinearLayout {
+public class SteppersView extends FrameLayout {
 
     private InternalSteppersAdapter internalSteppersAdapter;
-
     private FragmentManager fragmentManager;
-
     private List<OnStepChangedListener> onStepChangedListeners = new ArrayList<>();
+    private int circleActiveColor;
+    private int circleInactiveColor;
+    private int circleDoneColor;
+    private int labelActiveTextColor;
+    private int labelInactiveTextColor;
+    private int labelDoneTextColor;
+    private int subLabelActiveTextColor;
+    private int subLabelInactiveTextColor;
+    private int subLabelDoneTextColor;
+    private int labelTextSize;
+    private int subLabelTextSize;
+    private boolean backByTap;
 
     public SteppersView(Context context) {
         super(context);
@@ -46,20 +61,42 @@ public class SteppersView extends LinearLayout {
 
     public SteppersView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        loadAttrs(attrs, 0);
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public SteppersView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        loadAttrs(attrs, defStyleAttr);
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public SteppersView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
+        loadAttrs(attrs, defStyleAttr);
+    }
+
+    private void loadAttrs(AttributeSet attrs, int defStyle) {
+        TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.SteppersView, defStyle, 0);
+        circleDoneColor = a.getColor(R.styleable.SteppersView_circleDoneColor, ContextCompat.getColor(getContext(), R.color.circle_color_light_blue));
+        circleActiveColor = a.getColor(R.styleable.SteppersView_circleActiveColor, ContextCompat.getColor(getContext(), R.color.circle_color_light_blue));
+        circleInactiveColor = a.getColor(R.styleable.SteppersView_circleInactiveColor, ContextCompat.getColor(getContext(), R.color.circle_color_dark_blue));
+        labelActiveTextColor = a.getColor(R.styleable.SteppersView_labelActiveTextColor, ContextCompat.getColor(getContext(), android.R.color.black));
+        labelInactiveTextColor = a.getColor(R.styleable.SteppersView_labelInactiveTextColor, ContextCompat.getColor(getContext(), R.color.circle_color_dark_blue));
+        labelDoneTextColor = a.getColor(R.styleable.SteppersView_labelDoneTextColor, ContextCompat.getColor(getContext(), R.color.circle_color_dark_blue));
+        subLabelActiveTextColor = a.getColor(R.styleable.SteppersView_subLabelActiveTextColor, ContextCompat.getColor(getContext(), R.color.label_color));
+        subLabelInactiveTextColor = a.getColor(R.styleable.SteppersView_subLabelInactiveTextColor, ContextCompat.getColor(getContext(), R.color.label_color));
+        subLabelDoneTextColor = a.getColor(R.styleable.SteppersView_subLabelDoneTextColor, ContextCompat.getColor(getContext(), R.color.label_color));
+        labelTextSize = a.getDimensionPixelSize(R.styleable.SteppersView_labelTextSize, getResources().getDimensionPixelSize(R.dimen.label_text_size));
+        subLabelTextSize = a.getDimensionPixelSize(R.styleable.SteppersView_subLabelTextSize, getResources().getDimensionPixelSize(R.dimen.sub_label_text_size));
+        backByTap = a.getBoolean(R.styleable.SteppersView_backByTap, true);
+        a.recycle();
     }
 
     public void notifyDataSetChanged() {
-        internalSteppersAdapter.notifyDataSetChanged();
+        if(internalSteppersAdapter != null) {
+            internalSteppersAdapter.notifyDataSetChanged();
+        }
     }
 
     public void setAdapter(StepperAdapter adapter) {
@@ -112,6 +149,121 @@ public class SteppersView extends LinearLayout {
         return internalSteppersAdapter.getItemCount();
     }
 
+    public void setCircleActiveColor(@ColorInt int circleActiveColor) {
+        this.circleActiveColor = circleActiveColor;
+        notifyDataSetChanged();
+    }
+
+    public void setCircleInactiveColor(@ColorInt int circleInactiveColor) {
+        this.circleInactiveColor = circleInactiveColor;
+        notifyDataSetChanged();
+    }
+
+    public void setCircleDoneColor(@ColorInt int circleDoneColor) {
+        this.circleDoneColor = circleDoneColor;
+        notifyDataSetChanged();
+    }
+
+    public void setLabelActiveTextColor(@ColorInt int labelActiveTextColor) {
+        this.labelActiveTextColor = labelActiveTextColor;
+        notifyDataSetChanged();
+    }
+
+    public void setLabelInactiveTextColor(@ColorInt int labelInactiveTextColor) {
+        this.labelInactiveTextColor = labelInactiveTextColor;
+        notifyDataSetChanged();
+    }
+
+    public void setLabelDoneTextColor(@ColorInt int labelDoneTextColor) {
+        this.labelDoneTextColor = labelDoneTextColor;
+        notifyDataSetChanged();
+    }
+
+    public void setSubLabelActiveTextColor(@ColorInt int subLabelActiveTextColor) {
+        this.subLabelActiveTextColor = subLabelActiveTextColor;
+        notifyDataSetChanged();
+    }
+
+    public void setSubLabelInactiveTextColor(@ColorInt int subLabelInactiveTextColor) {
+        this.subLabelInactiveTextColor = subLabelInactiveTextColor;
+        notifyDataSetChanged();
+    }
+
+    public void setSubLabelDoneTextColor(@ColorInt int subLabelDoneTextColor) {
+        this.subLabelDoneTextColor = subLabelDoneTextColor;
+        notifyDataSetChanged();
+    }
+
+    public void setLabelTextSize(int labelTextSize) {
+        this.labelTextSize = labelTextSize;
+    }
+
+    public void setSubLabelTextSize(int subLabelTextSize) {
+        this.subLabelTextSize = subLabelTextSize;
+    }
+
+    public void setBackByTap(boolean backByTap) {
+        this.backByTap = backByTap;
+        notifyDataSetChanged();
+    }
+
+    @ColorInt
+    public int getCircleActiveColor() {
+        return circleActiveColor;
+    }
+
+    @ColorInt
+    public int getCircleInactiveColor() {
+        return circleInactiveColor;
+    }
+
+    @ColorInt
+    public int getCircleDoneColor() {
+        return circleDoneColor;
+    }
+
+    @ColorInt
+    public int getLabelActiveTextColor() {
+        return labelActiveTextColor;
+    }
+
+    @ColorInt
+    public int getLabelInactiveTextColor() {
+        return labelInactiveTextColor;
+    }
+
+    @ColorInt
+    public int getLabelDoneTextColor() {
+        return labelDoneTextColor;
+    }
+
+    @ColorInt
+    public int getSubLabelActiveTextColor() {
+        return subLabelActiveTextColor;
+    }
+
+    @ColorInt
+    public int getSubLabelInactiveTextColor() {
+        return subLabelInactiveTextColor;
+    }
+
+    @ColorInt
+    public int getSubLabelDoneTextColor() {
+        return subLabelDoneTextColor;
+    }
+
+    public int getLabelTextSize() {
+        return labelTextSize;
+    }
+
+    public int getSubLabelTextSize() {
+        return subLabelTextSize;
+    }
+
+    public boolean isBackByTap() {
+        return backByTap;
+    }
+
     @Override
     protected Parcelable onSaveInstanceState() {
         Parcelable superState = super.onSaveInstanceState();
@@ -126,15 +278,24 @@ public class SteppersView extends LinearLayout {
     }
 
     private void build() {
-        setOrientation(LinearLayout.HORIZONTAL);
+        initAdapter();
+        initRecyclerView();
+    }
+
+    private void initRecyclerView() {
         RecyclerView recyclerView = new RecyclerView(getContext());
-        RecyclerView.LayoutParams layoutParams = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        LayoutParams layoutParams = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         recyclerView.setLayoutParams(layoutParams);
-        addView(recyclerView);
+        recyclerView.setClipToPadding(false);
+        recyclerView.setPadding(0,0,0, getResources().getDimensionPixelSize(R.dimen.item_text_margin_top));
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        internalSteppersAdapter = new InternalSteppersAdapter(this, fragmentManager);
         recyclerView.setAdapter(internalSteppersAdapter);
+        addView(recyclerView);
+    }
+
+    private void initAdapter() {
+        internalSteppersAdapter = new InternalSteppersAdapter(this, fragmentManager);
         internalSteppersAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
             public void onItemRangeChanged(int positionStart, int itemCount) {

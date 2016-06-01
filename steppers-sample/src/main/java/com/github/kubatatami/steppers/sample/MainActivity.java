@@ -24,17 +24,21 @@ public class MainActivity extends AppCompatActivity {
         steppersView.setAdapter(new StepperAdapter() {
             @Override
             public String getLabel(int step) {
-                return "Step nr " + step;
+                return "Step nr " + (step + 1);
             }
 
             @Override
             public String getSubLabel(int step) {
-                return steppersView.getCurrentStep() > step ? "Done" : "sublabel nr " + step;
+                return steppersView.getCurrentStep() > step ? "Done" : "sublabel nr " + (step + 1);
             }
 
             @Override
             public Fragment getFragment(int step) {
-                return new BlankFragment();
+                Fragment fragment = new BlankFragment();
+                Bundle bundle = new Bundle();
+                bundle.putInt(BlankFragment.KEY_NR, step + 1);
+                fragment.setArguments(bundle);
+                return fragment;
             }
 
             @Override

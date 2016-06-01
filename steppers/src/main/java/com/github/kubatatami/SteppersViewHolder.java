@@ -41,6 +41,7 @@ public class SteppersViewHolder extends RecyclerView.ViewHolder {
         this.textViewLabel = (TextView) itemView.findViewById(R.id.textViewLabel);
         this.textViewSubLabel = (TextView) itemView.findViewById(R.id.textViewSubLabel);
         this.frameLayout = (FrameLayout) itemView.findViewById(R.id.frameLayout);
+        this.frameLayout.setId(ViewIdGenerator.generateViewId());
     }
 
     /**

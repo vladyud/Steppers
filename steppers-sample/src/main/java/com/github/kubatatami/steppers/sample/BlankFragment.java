@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 
 /**
@@ -13,6 +14,8 @@ import android.widget.Button;
  */
 public class BlankFragment extends Fragment {
 
+
+    public static final String KEY_NR = "nr";
 
     public BlankFragment() {
         // Required empty public constructor
@@ -25,6 +28,7 @@ public class BlankFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_blank, container, false);
 
+        TextView textView = (TextView) view.findViewById(R.id.text);
         Button button = (Button) view.findViewById(R.id.button);
         Button button2 = (Button) view.findViewById(R.id.button2);
         Button button3 = (Button) view.findViewById(R.id.button3);
@@ -46,6 +50,7 @@ public class BlankFragment extends Fragment {
                 ((MainActivity)getActivity()).setStep(0);
             }
         });
+        textView.setText(getString(R.string.hello_blank_fragment) + " " + getArguments().getInt(KEY_NR));
         return view;
     }
 }

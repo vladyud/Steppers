@@ -16,12 +16,11 @@
 
 package com.github.kubatatami;
 
-import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,15 +30,12 @@ import com.github.kubatatami.steppers.R;
 public class InternalSteppersAdapter extends RecyclerView.Adapter<SteppersViewHolder> {
 
     private SteppersView steppersView;
-    private Context context;
     private FragmentManager fragmentManager;
-
     private int currentStep = 0;
     private StepperAdapter adapter;
 
     public InternalSteppersAdapter(SteppersView steppersView, FragmentManager fragmentManager) {
         this.steppersView = steppersView;
-        this.context = steppersView.getContext();
         this.fragmentManager = fragmentManager;
         setHasStableIds(true);
     }
@@ -52,7 +48,6 @@ public class InternalSteppersAdapter extends RecyclerView.Adapter<SteppersViewHo
 
     @Override
     public void onBindViewHolder(final SteppersViewHolder holder, final int position) {
-
         holder.setChecked(position < currentStep);
         if (holder.isChecked()) {
             holder.roundedView.setChecked(true);
@@ -61,12 +56,20 @@ public class InternalSteppersAdapter extends RecyclerView.Adapter<SteppersViewHo
             holder.roundedView.setText(position + 1 + "");
         }
 
-        if (position == currentStep || holder.isChecked()) {
-            holder.roundedView.setCircleColor(R.color.circle_color_light_blue);
+        if (position == currentStep) {
+            holder.roundedView.setCircleColor(steppersView.getCircleActiveColor());
+            holder.textViewLabel.setTextColor(steppersView.getLabelActiveTextColor());
+            holder.textViewSubLabel.setTextColor(steppersView.getSubLabelActiveTextColor());
+        } else if (holder.isChecked()) {
+            holder.roundedView.setCircleColor(steppersView.getCircleDoneColor());
+            holder.textViewLabel.setTextColor(steppersView.getLabelDoneTextColor());
+            holder.textViewSubLabel.setTextColor(steppersView.getSubLabelDoneTextColor());
         } else {
-            holder.roundedView.setCircleColor(R.color.circle_color_dark_blue);
+            holder.roundedView.setCircleColor(steppersView.getCircleInactiveColor());
+            holder.textViewLabel.setTextColor(steppersView.getLabelInactiveTextColor());
+            holder.textViewSubLabel.setTextColor(steppersView.getSubLabelInactiveTextColor());
         }
-        if (position < currentStep) {
+        if (position < currentStep && steppersView.isBackByTap()) {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -77,61 +80,41 @@ public class InternalSteppersAdapter extends RecyclerView.Adapter<SteppersViewHo
             holder.itemView.setOnClickListener(null);
         }
 
-        holder.textViewLabel.setTextColor(ContextCompat.getColor(context, position == currentStep ? android.R.color.black : R.color.circle_color_dark_blue));
         holder.textViewLabel.setText(adapter.getLabel(position));
         holder.textViewSubLabel.setText(adapter.getSubLabel(position));
+        holder.textViewLabel.setTextSize(TypedValue.COMPLEX_UNIT_PX, steppersView.getLabelTextSize());
+        holder.textViewSubLabel.setTextSize(TypedValue.COMPLEX_UNIT_PX, steppersView.getSubLabelTextSize());
 
         holder.frameLayout.setVisibility(position == currentStep ? View.VISIBLE : View.GONE);
-
-        initFragment(holder, position);
     }
 
-    private void initFragment(SteppersViewHolder holder, int position) {
-        if (fragmentManager != null ) {
-            holder.frameLayout.setTag(frameLayoutName());
-
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
-            String name = makeFragmentName(steppersView.getId(), position);
-            Fragment fragment = fragmentManager.findFragmentByTag(name);
-
-            if (position != currentStep) {
-                if (fragment != null) {
-                    fragmentTransaction.detach(fragment);
-                }
-            } else {
-                if (fragment != null) {
-                    fragmentTransaction.attach(fragment);
-                } else {
-                    fragment = adapter.getFragment(position);
-                    fragmentTransaction.add(steppersView.getId(), fragment,
-                            name);
-                }
-            }
-
-            if (fragmentTransaction != null) {
-                fragmentTransaction.commitAllowingStateLoss();
-                fragmentManager.executePendingTransactions();
-            }
-
-            if (fragmentManager.findFragmentByTag(name) != null &&
-                    fragmentManager.findFragmentByTag(name).getView() != null) {
-
-                View fragmentView = fragmentManager.findFragmentByTag(name).getView();
-
-                if (fragmentView.getParent() != null && frameLayoutName() != ((View) fragmentView.getParent()).getTag()) {
-                    steppersView.removeViewInLayout(fragmentView);
-
-                    holder.frameLayout.removeAllViews();
-                    holder.frameLayout.addView(fragmentView);
-                }
-            }
-        }
+    @Override
+    public void onViewAttachedToWindow(SteppersViewHolder holder) {
+        super.onViewAttachedToWindow(holder);
+        initFragment(holder, holder.getAdapterPosition());
     }
 
     @Override
     public long getItemId(int position) {
         return position;
+    }
+
+    @Override
+    public int getItemCount() {
+        return adapter.getStepCount();
+    }
+
+    private void initFragment(SteppersViewHolder holder, int position) {
+        FragmentTransaction ft = fragmentManager.beginTransaction();
+        String name = makeFragmentName(steppersView.getId(), position);
+        Fragment fragment = fragmentManager.findFragmentByTag(name);
+        if (position != currentStep && fragment != null) {
+            ft.remove(fragment);
+        } else if (position == currentStep) {
+            ft.replace(holder.frameLayout.getId(), adapter.getFragment(position), name);
+        }
+        ft.commitAllowingStateLoss();
+        fragmentManager.executePendingTransactions();
     }
 
     public Fragment getStepFragment(int step) {
@@ -166,17 +149,8 @@ public class InternalSteppersAdapter extends RecyclerView.Adapter<SteppersViewHo
         }
     }
 
-    @Override
-    public int getItemCount() {
-        return adapter.getStepCount();
-    }
-
     private boolean isValidStep(int step) {
         return step >= 0 && step < adapter.getStepCount();
-    }
-
-    private static String frameLayoutName() {
-        return "android:steppers:framelayout";
     }
 
     private static String makeFragmentName(int viewId, long id) {

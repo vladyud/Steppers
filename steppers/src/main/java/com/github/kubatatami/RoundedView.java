@@ -84,7 +84,7 @@ public class RoundedView extends View {
     }
 
     public void setCircleColor(int color) {
-        this.color = ContextCompat.getColor(getContext(), color);
+        this.color = color;
         invalidate();
     }
 
