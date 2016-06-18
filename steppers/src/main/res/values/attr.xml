@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="SteppersView">
+        <attr name="circleActiveColor" format="color"/>
+        <attr name="circleInactiveColor" format="color"/>
+        <attr name="circleDoneColor" format="color"/>
+
+        <attr name="labelActiveTextColor" format="color"/>
+        <attr name="labelInactiveTextColor" format="color"/>
+        <attr name="labelDoneTextColor" format="color"/>
+
+        <attr name="subLabelActiveTextColor" format="color"/>
+        <attr name="subLabelInactiveTextColor" format="color"/>
+        <attr name="subLabelDoneTextColor" format="color"/>
+
+        <attr name="labelTextSize" format="dimension"/>
+        <attr name="subLabelTextSize" format="dimension"/>
+        <attr name="backByTap" format="boolean"/>
+
+    </declare-styleable>
+</resources>
