@@ -40,19 +40,33 @@ import java.util.List;
 public class SteppersView extends FrameLayout {
 
     private InternalSteppersAdapter internalSteppersAdapter;
+
     private FragmentManager fragmentManager;
+
     private List<OnStepChangedListener> onStepChangedListeners = new ArrayList<>();
+
     private int circleActiveColor;
+
     private int circleInactiveColor;
+
     private int circleDoneColor;
+
     private int labelActiveTextColor;
+
     private int labelInactiveTextColor;
+
     private int labelDoneTextColor;
+
     private int subLabelActiveTextColor;
+
     private int subLabelInactiveTextColor;
+
     private int subLabelDoneTextColor;
+
     private int labelTextSize;
+
     private int subLabelTextSize;
+
     private boolean backByTap;
 
     public SteppersView(Context context) {
@@ -94,7 +108,7 @@ public class SteppersView extends FrameLayout {
     }
 
     public void notifyDataSetChanged() {
-        if(internalSteppersAdapter != null) {
+        if (internalSteppersAdapter != null) {
             internalSteppersAdapter.notifyDataSetChanged();
         }
     }
@@ -287,7 +301,7 @@ public class SteppersView extends FrameLayout {
         LayoutParams layoutParams = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         recyclerView.setLayoutParams(layoutParams);
         recyclerView.setClipToPadding(false);
-        recyclerView.setPadding(0,0,0, getResources().getDimensionPixelSize(R.dimen.item_text_margin_top));
+        recyclerView.setPadding(0, 0, 0, getResources().getDimensionPixelSize(R.dimen.item_text_margin_top));
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(internalSteppersAdapter);
@@ -305,7 +319,7 @@ public class SteppersView extends FrameLayout {
     }
 
     private void invokeStepChangedListeners(int step) {
-        for(OnStepChangedListener onStepChangedListener : onStepChangedListeners) {
+        for (OnStepChangedListener onStepChangedListener : onStepChangedListeners) {
             onStepChangedListener.onStepChanged(step);
         }
     }
@@ -348,6 +362,14 @@ public class SteppersView extends FrameLayout {
     public interface OnStepChangedListener {
 
         void onStepChanged(int step);
+    }
+
+    public void hideStep(int step) {
+        internalSteppersAdapter.hideStep(step);
+    }
+
+    public void showStep(int step) {
+        internalSteppersAdapter.showStep(step);
     }
 
 }
