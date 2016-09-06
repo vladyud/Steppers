@@ -121,7 +121,7 @@ class InternalSteppersAdapter extends RecyclerView.Adapter<SteppersViewHolder> {
         if (position != currentStep && fragment != null) {
             ft.remove(fragment);
         } else if (position == currentStep) {
-            ft.replace(holder.frameLayout.getId(), adapter.getFragment(position), name);
+            ft.replace(holder.frameLayout.getId(), adapter.getFragment(getExternalAdapterPosition(position)), name);
         }
         ft.commitAllowingStateLoss();
         fragmentManager.executePendingTransactions();
