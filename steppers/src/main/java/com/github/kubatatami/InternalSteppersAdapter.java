@@ -28,6 +28,7 @@ import android.view.ViewGroup;
 import com.github.kubatatami.steppers.R;
 
 import java.util.LinkedList;
+import java.util.List;
 
 class InternalSteppersAdapter extends RecyclerView.Adapter<SteppersViewHolder> {
 
@@ -39,7 +40,13 @@ class InternalSteppersAdapter extends RecyclerView.Adapter<SteppersViewHolder> {
 
     private StepperAdapter adapter;
 
-    private LinkedList<Integer> visibleSteps = new LinkedList<>();
+    LinkedList<Integer> visibleSteps = new LinkedList<>();
+
+    public List<SteppersView.OnStepClickListener> getOnStepClickListeners() {
+        return onStepClickListeners;
+    }
+
+    private List<SteppersView.OnStepClickListener> onStepClickListeners = new LinkedList<>();
 
     InternalSteppersAdapter(SteppersView steppersView, FragmentManager fragmentManager) {
         this.steppersView = steppersView;
@@ -146,6 +153,9 @@ class InternalSteppersAdapter extends RecyclerView.Adapter<SteppersViewHolder> {
             int start = Math.min(step, getCurrentStep());
             setCurrentStep(step);
             notifyItemRangeChanged(start, len);
+            for (SteppersView.OnStepClickListener onItemClickListener : onStepClickListeners) {
+                onItemClickListener.onStepClick(step);
+            }
         }
     }
 
@@ -204,4 +214,6 @@ class InternalSteppersAdapter extends RecyclerView.Adapter<SteppersViewHolder> {
             }
         }
     }
+
+
 }
