@@ -116,7 +116,7 @@ class InternalSteppersAdapter extends RecyclerView.Adapter<SteppersViewHolder> {
 
     private void initFragment(SteppersViewHolder holder, int position) {
         FragmentTransaction ft = fragmentManager.beginTransaction();
-        String name = makeFragmentName(steppersView.getId(), position);
+        String name = makeFragmentName(steppersView.getId(), getExternalAdapterPosition(position));
         Fragment fragment = fragmentManager.findFragmentByTag(name);
         if (position != currentStep && fragment != null) {
             ft.remove(fragment);
