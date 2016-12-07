@@ -10,6 +10,7 @@
     tools:showIn="@layout/item_steppers">
 
     <View
+        android:id="@+id/viewLineAbove"
         android:layout_width="1dp"
         android:layout_height="@dimen/item_line_first_height"
         android:layout_marginBottom="@dimen/item_line_first_margin"
@@ -21,6 +22,7 @@
         android:layout_height="@dimen/item_circle_width_height" />
 
     <View
+        android:id="@+id/viewLineBottom"
         android:layout_width="1dp"
         android:layout_height="match_parent"
         android:layout_marginTop="@dimen/item_line_first_margin"

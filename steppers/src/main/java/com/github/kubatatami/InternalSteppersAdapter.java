@@ -47,7 +47,7 @@ public class InternalSteppersAdapter extends RecyclerView.Adapter<SteppersViewHo
     }
 
     @Override
-    public void onBindViewHolder(final SteppersViewHolder holder, final int position) {
+    public void onBindViewHolder(final SteppersViewHolder holder, int position) {
         holder.setChecked(position < currentStep);
         if (holder.isChecked()) {
             holder.roundedView.setChecked(true);
@@ -73,11 +73,23 @@ public class InternalSteppersAdapter extends RecyclerView.Adapter<SteppersViewHo
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    setStep(position);
+                    setStep(holder.getAdapterPosition());
                 }
             });
         } else {
             holder.itemView.setOnClickListener(null);
+        }
+
+        if (holder.getAdapterPosition() == 0) {
+            holder.viewLineAbove.setVisibility(View.INVISIBLE);
+        } else {
+            holder.viewLineAbove.setVisibility(View.VISIBLE);
+        }
+
+        if (position == getItemCount() - 1) {
+            holder.viewLineBottom.setVisibility(View.INVISIBLE);
+        } else {
+            holder.viewLineBottom.setVisibility(View.VISIBLE);
         }
 
         holder.textViewLabel.setText(adapter.getLabel(position));

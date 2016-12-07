@@ -33,6 +33,8 @@ public class SteppersViewHolder extends RecyclerView.ViewHolder {
     protected TextView textViewLabel;
     protected TextView textViewSubLabel;
     protected FrameLayout frameLayout;
+    protected View viewLineAbove;
+    protected View viewLineBottom;
 
     public SteppersViewHolder(View itemView) {
         super(itemView);
@@ -42,6 +44,8 @@ public class SteppersViewHolder extends RecyclerView.ViewHolder {
         this.textViewSubLabel = (TextView) itemView.findViewById(R.id.textViewSubLabel);
         this.frameLayout = (FrameLayout) itemView.findViewById(R.id.frameLayout);
         this.frameLayout.setId(ViewIdGenerator.generateViewId());
+        this.viewLineAbove = itemView.findViewById(R.id.viewLineAbove);
+        this.viewLineBottom = itemView.findViewById(R.id.viewLineBottom);
     }
 
     /**
