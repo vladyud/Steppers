@@ -65,10 +65,12 @@ public class InternalSteppersAdapter extends RecyclerView.Adapter<SteppersViewHo
         } else if (holder.isChecked()) {
             holder.roundedView.setCircleColor(steppersView.getCircleDoneColor());
             holder.textViewLabel.setTextColor(steppersView.getLabelDoneTextColor());
+            holder.textViewLabel.setTypeface(holder.textViewLabel.getTypeface(), Typeface.NORMAL);
             holder.textViewSubLabel.setTextColor(steppersView.getSubLabelDoneTextColor());
         } else {
             holder.roundedView.setCircleColor(steppersView.getCircleInactiveColor());
             holder.textViewLabel.setTextColor(steppersView.getLabelInactiveTextColor());
+            holder.textViewLabel.setTypeface(holder.textViewLabel.getTypeface(), Typeface.NORMAL);
             holder.textViewSubLabel.setTextColor(steppersView.getSubLabelInactiveTextColor());
         }
         if (position < currentStep && steppersView.isBackByTap()) {
