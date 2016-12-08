@@ -16,6 +16,7 @@
 
 package com.github.kubatatami;
 
+import android.graphics.Typeface;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -59,6 +60,7 @@ public class InternalSteppersAdapter extends RecyclerView.Adapter<SteppersViewHo
         if (position == currentStep) {
             holder.roundedView.setCircleColor(steppersView.getCircleActiveColor());
             holder.textViewLabel.setTextColor(steppersView.getLabelActiveTextColor());
+            holder.textViewLabel.setTypeface(holder.textViewLabel.getTypeface(), Typeface.BOLD);
             holder.textViewSubLabel.setTextColor(steppersView.getSubLabelActiveTextColor());
         } else if (holder.isChecked()) {
             holder.roundedView.setCircleColor(steppersView.getCircleDoneColor());
