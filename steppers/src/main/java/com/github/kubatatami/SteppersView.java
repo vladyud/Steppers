@@ -78,15 +78,15 @@ public class SteppersView extends FrameLayout {
 
     private void loadAttrs(AttributeSet attrs, int defStyle) {
         TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.SteppersView, defStyle, 0);
-        circleDoneColor = a.getColor(R.styleable.SteppersView_circleDoneColor, ContextCompat.getColor(getContext(), R.color.circle_color_light_blue));
-        circleActiveColor = a.getColor(R.styleable.SteppersView_circleActiveColor, ContextCompat.getColor(getContext(), R.color.circle_color_light_blue));
-        circleInactiveColor = a.getColor(R.styleable.SteppersView_circleInactiveColor, ContextCompat.getColor(getContext(), R.color.circle_color_dark_blue));
-        labelActiveTextColor = a.getColor(R.styleable.SteppersView_labelActiveTextColor, ContextCompat.getColor(getContext(), android.R.color.black));
-        labelInactiveTextColor = a.getColor(R.styleable.SteppersView_labelInactiveTextColor, ContextCompat.getColor(getContext(), R.color.circle_color_dark_blue));
-        labelDoneTextColor = a.getColor(R.styleable.SteppersView_labelDoneTextColor, ContextCompat.getColor(getContext(), R.color.circle_color_dark_blue));
-        subLabelActiveTextColor = a.getColor(R.styleable.SteppersView_subLabelActiveTextColor, ContextCompat.getColor(getContext(), R.color.label_color));
-        subLabelInactiveTextColor = a.getColor(R.styleable.SteppersView_subLabelInactiveTextColor, ContextCompat.getColor(getContext(), R.color.label_color));
-        subLabelDoneTextColor = a.getColor(R.styleable.SteppersView_subLabelDoneTextColor, ContextCompat.getColor(getContext(), R.color.label_color));
+        circleDoneColor = a.getColor(R.styleable.SteppersView_circleDoneColor, ContextCompat.getColor(getContext(), R.color.colorPrimary));
+        circleActiveColor = a.getColor(R.styleable.SteppersView_circleActiveColor, ContextCompat.getColor(getContext(), R.color.colorPrimary));
+        circleInactiveColor = a.getColor(R.styleable.SteppersView_circleInactiveColor, ContextCompat.getColor(getContext(), R.color.colorDisableTextDark));
+        labelActiveTextColor = a.getColor(R.styleable.SteppersView_labelActiveTextColor, ContextCompat.getColor(getContext(), R.color.colorPrimaryTextDark));
+        labelInactiveTextColor = a.getColor(R.styleable.SteppersView_labelInactiveTextColor, ContextCompat.getColor(getContext(), R.color.colorDisableTextDark));
+        labelDoneTextColor = a.getColor(R.styleable.SteppersView_labelDoneTextColor, ContextCompat.getColor(getContext(), R.color.colorPrimaryTextDark));
+        subLabelActiveTextColor = a.getColor(R.styleable.SteppersView_subLabelActiveTextColor, ContextCompat.getColor(getContext(), R.color.colorSecondaryTextDark));
+        subLabelInactiveTextColor = a.getColor(R.styleable.SteppersView_subLabelInactiveTextColor, ContextCompat.getColor(getContext(), R.color.colorDisableTextDark));
+        subLabelDoneTextColor = a.getColor(R.styleable.SteppersView_subLabelDoneTextColor, ContextCompat.getColor(getContext(), R.color.colorSecondaryTextDark));
         labelTextSize = a.getDimensionPixelSize(R.styleable.SteppersView_labelTextSize, getResources().getDimensionPixelSize(R.dimen.label_text_size));
         subLabelTextSize = a.getDimensionPixelSize(R.styleable.SteppersView_subLabelTextSize, getResources().getDimensionPixelSize(R.dimen.sub_label_text_size));
         backByTap = a.getBoolean(R.styleable.SteppersView_backByTap, true);

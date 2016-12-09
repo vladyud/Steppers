@@ -38,7 +38,7 @@ public class RoundedView extends View {
     private Paint paint = new Paint(Paint.DITHER_FLAG);
     private String text = null;
     private boolean checked = false;
-    private int color = ContextCompat.getColor(getContext(), R.color.circle_color_dark_blue);
+    private int color = ContextCompat.getColor(getContext(), R.color.colorPrimary);
 
 
     public RoundedView(Context context) {
@@ -89,7 +89,7 @@ public class RoundedView extends View {
     }
 
     public void setText(String text) {
-        color = ContextCompat.getColor(getContext(), R.color.circle_color_dark_blue);
+        color = ContextCompat.getColor(getContext(), R.color.colorPrimary);
         this.text = text;
         this.checked = false;
         invalidate();
