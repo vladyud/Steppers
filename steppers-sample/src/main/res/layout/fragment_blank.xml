@@ -20,18 +20,21 @@
             android:id="@+id/button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/next" />
+            android:text="@string/next"
+            style="@style/Widget.AppCompat.Button.Colored"/>
 
         <Button
             android:id="@+id/button2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/prev" />
+            android:text="@string/prev"
+            style="@style/Widget.AppCompat.Button.Borderless"/>
 
         <Button
             android:id="@+id/button3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/first" />
+            android:text="@string/first"
+            style="@style/Widget.AppCompat.Button.Borderless"/>
     </LinearLayout>
 </LinearLayout>
