@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         steppersView = (SteppersView) findViewById(R.id.steppersView);
         steppersView.setFragmentManager(getSupportFragmentManager());
+        steppersView.setBackByTap(false);
         steppersView.setAdapter(new StepperAdapter() {
             @Override
             public String getLabel(int step) {
